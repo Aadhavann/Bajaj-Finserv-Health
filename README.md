@@ -4,6 +4,12 @@ This is a simple REST API built with Flask. It takes in an array of strings and 
 
 The project was originally built for a take-home challenge but is generic enough to use as a reference for similar APIs.
 
+## Using the endpoint:
+Example: curl -X POST https://bajaj-finserv-health-nt0c.onrender.com/bfhl -H "Content-Type: application/json" -d "{\"data\": [\"a\", \"1\", \"334\", \"4\", \"R\", \"$\"]}"
+
+URL: https://bajaj-finserv-health-nt0c.onrender.com/bfhl
+
+**NOTE**: A free instance will spin down due to inactivity, which can delay requests by 50 seconds or more. Please consider that while evaluating my submission.
 ---
 
 ## Setup and Running Locally
