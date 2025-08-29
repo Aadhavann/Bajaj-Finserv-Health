@@ -3,6 +3,11 @@ import json
 
 app = Flask(__name__)
 
+
+@app.route("/", methods=["GET"])
+def home():
+    return {"message": "BFHL API is running. Use POST /bfhl"}
+
 @app.route('/bfhl', methods=['POST'])
 def process_data():
     try:
