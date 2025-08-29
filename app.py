@@ -6,7 +6,12 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    return {"message": "BFHL API is running. Use POST /bfhl"}
+    return jsonify({
+        "message": "BFHL API is running",
+        "endpoints": {
+            "POST /bfhl": "Send JSON { data: [...] } to categorize values"
+        }
+    })
 
 @app.route('/bfhl', methods=['POST'])
 def process_data():
@@ -40,7 +45,6 @@ def process_data():
             for i, char in enumerate(alphabet_chars):
                 concat_string += char.upper() if i % 2 == 0 else char.lower()
         
-        # build response dict in correct order
         response = {
             "is_success": True,
             "user_id": "john_doe_17091999",
@@ -54,7 +58,6 @@ def process_data():
             "concat_string": concat_string
         }
 
-        # force compact, ordered JSON
         return Response(
             json.dumps(response, indent=None, separators=(",", ":"), sort_keys=False),
             mimetype="application/json"
