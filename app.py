@@ -3,28 +3,31 @@ import json
 
 app = Flask(__name__)
 
-
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({
         "message": "BFHL API is running",
         "endpoints": {
-            "POST /bfhl": "Send JSON { data: [...] } to categorize values"
+            "POST /bfhl": "Send JSON { data: [...] } to categorize values",
+            "GET /bfhl": "View usage instructions"
         }
     })
 
-@app.route('/bfhl', methods=['POST'])
+@app.route('/bfhl', methods=['GET', 'POST'])
 def process_data():
+    if request.method == 'GET':
+        return jsonify({
+            "message": "Send a POST request with { data: [...] } to /bfhl"
+        })
+
     try:
         data = request.json.get('data', [])
-        
         odd_numbers = []
         even_numbers = []
         alphabets = []
         special_characters = []
         sum_numbers = 0
         alphabet_chars = []
-        
         for item in data:
             if item.isdigit():
                 num = int(item)
@@ -38,13 +41,11 @@ def process_data():
                 alphabet_chars.extend(list(item))
             else:
                 special_characters.append(item)
-        
         concat_string = ""
         if alphabet_chars:
             alphabet_chars.reverse()
             for i, char in enumerate(alphabet_chars):
                 concat_string += char.upper() if i % 2 == 0 else char.lower()
-        
         response = {
             "is_success": True,
             "user_id": "john_doe_17091999",
@@ -57,18 +58,9 @@ def process_data():
             "sum": str(sum_numbers),
             "concat_string": concat_string
         }
-
-        return Response(
-            json.dumps(response, indent=None, separators=(",", ":"), sort_keys=False),
-            mimetype="application/json"
-        )
-
+        return jsonify(response)
     except Exception:
-        return Response(
-            json.dumps({"is_success": False, "error": "Invalid request format"}),
-            mimetype="application/json",
-            status=400
-        )
+        return jsonify({"is_success": False, "error": "Invalid request format"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
